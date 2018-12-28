@@ -1,5 +1,5 @@
-tara = User.create(name: "Tara", username: "misubella")
-ben = User.create(name: "Ben", username: "bentay")
+tara = User.create(name: "Tara", username: "misubella", password: "tictactoe")
+ben = User.create(name: "Ben", username: "bentay", password: "password")
 
 healthAndFitness = Category.create(name: "Health and Fitness Goals")
 relationship = Category.create(name: "Relationship Goals")
