@@ -1,4 +1,3 @@
-require_relative '../config/environment'
 tara = User.create(name: "Tara", username: "misubella")
 ben = User.create(name: "Ben", username: "bentay")
 
@@ -23,27 +22,18 @@ goal9 = Goal.create(title: "Learn To Cope With Stress Through Meditation", descr
 goal10 = Goal.create(title: "Learn To Cope With Stress Through Meditation", description: "", categoryid: personalDevelopment.id, userid:tara.id)
 goal11 = Goal.create(title: "Learn To Cope With Stress Through Meditation", description: "", categoryid: personalDevelopment.id, userid:tara.id)
 
-# fulton = Station.create(name: "Fulton")
-# #a = Line.create(name: "A")
-# fulton.lines << a
 
-# a station has many lines
-# a line has many stations
-# station_line belongs to line and station 
-# a user has many categories
-# catergory has many users
-# goal belongs to a user and a catergory
-
-findhealthAndFitness = Category.find(goal1.categoryid)
-puts "healthAndFitness id: #{healthAndFitness.id}"
-puts "goal1 categoryid: #{goal1.categoryid}"
-puts "goal1 description: #{goal1.description}"
-puts "healthAndFitness name: #{findhealthAndFitness.name}"
-puts "goal1 userid: #{goal1.userid}"
-puts "tara id: #{tara.id}"
-
-
-findrelationship = Category.find(goal2.categoryid)
-puts "relationship id: #{relationship.id}"
-puts "goal2 categoryid: #{goal2.categoryid}"
-puts "relationship name: #{relationship.name}"
+#
+# findhealthAndFitness = Category.find(goal1.categoryid)
+# puts "healthAndFitness id: #{healthAndFitness.id}"
+# puts "goal1 categoryid: #{goal1.categoryid}"
+# puts "goal1 description: #{goal1.description}"
+# puts "healthAndFitness name: #{findhealthAndFitness.name}"
+# puts "goal1 userid: #{goal1.userid}"
+# puts "tara id: #{tara.id}"
+#
+#
+# findrelationship = Category.find(goal2.categoryid)
+# puts "relationship id: #{relationship.id}"
+# puts "goal2 categoryid: #{goal2.categoryid}"
+# puts "relationship name: #{relationship.name}"
