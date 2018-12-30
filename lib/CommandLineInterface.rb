@@ -66,10 +66,24 @@ end
 
 #pass category_id as argument and from the list of goals find where category id = whats passed in
 def list_goals(category_id)
+  i = 1
+  goal_descriptions = []
   #save goal choice to an array with variable
   goal_choices = Goal.where(categoryid: category_id)
   goal_choices.each do |goal|
-  puts goal.title
+  puts "#{i}. #{goal.title}"
+  goal_descriptions << goal.description
+  i += 1
     end
+    puts "Enter the number associated with a title to view its description"
+    title_choice = gets.chomp
+    list_description(goal_descriptions[Integer(title_choice)-1])
+  end
+end
+
+  def list_description(goal_description)
+    goal_description = Goal.where(description: goal_description)
+    goal_description.each do |title|
+    puts "#{title.description}"
   end
 end
