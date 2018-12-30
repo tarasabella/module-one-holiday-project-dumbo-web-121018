@@ -1,5 +1,7 @@
 class CommandLineInterface
 
+  myUser = User.new
+
   def greet
     puts "Welcome to GoalDigger, a fun and personalized way to stay on track of ANY kind of life goal!"
 
@@ -20,7 +22,7 @@ class CommandLineInterface
     if my_user
       #save user id to reference later on
       puts "\nWelcome, #{my_user.name}!"
-      my_user.save
+      myUser = my_user
       gets_menu_input()
     else
       puts "no user found!"
