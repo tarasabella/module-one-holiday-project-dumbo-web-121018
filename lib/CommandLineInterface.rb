@@ -68,7 +68,8 @@ end
 def list_goals(category_id)
   #save goal choice to an array with variable
   goal_choices = Goal.where(categoryid: category_id)
-  puts goal_choices[0].title
-end
-
+  goal_choices.each do |goal|
+  puts goal.title
+    end
+  end
 end
