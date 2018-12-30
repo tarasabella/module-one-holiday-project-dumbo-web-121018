@@ -51,23 +51,26 @@ class CommandLineInterface
 
 def browse_categories
   i = 1
+  category_ids = []
   Category.all.each do |category|
     puts "#{i}. #{category.name}"
+    category_ids << category.id
     i+= 1
   end
   puts "Enter the number associated with category you would like to view"
   category_choice = gets.chomp
+  puts category_ids[Integer(category_choice)-1]
 end
 
 def goals
-  Category.all.select do |goal|
-  puts "#{goal.categoryid}"
+  Goals.select do |goal|
+  goal.where "#{categoryid} == categoryid"
 end
 end
 
 def category_goal
   if category_choice=="1"
-      goals()
+    goals()
   elsif category_choice=="2"
 
   elsif category_choice=="3"
