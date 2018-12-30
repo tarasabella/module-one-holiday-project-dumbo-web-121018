@@ -61,36 +61,14 @@ def browse_categories
   end
   puts "Enter the number associated with category you would like to view"
   category_choice = gets.chomp
-  puts category_ids[Integer(category_choice)-1]
+  list_goals(category_ids[Integer(category_choice)-1])
 end
 
-def goals
-  Goals.select do |goal|
-  goal.where "#{categoryid} == categoryid"
+#pass category_id as argument and from the list of goals find where category id = whats passed in
+def list_goals(category_id)
+  #save goal choice to an array with variable
+  goal_choices = Goal.where(categoryid: category_id)
+  puts goal_choices[0].title
 end
-end
 
-def category_goal
-  if category_choice=="1"
-    goals()
-  elsif category_choice=="2"
-
-  elsif category_choice=="3"
-
-  elsif category_choice=="4"
-
-  elsif category_choice=="5"
-
-  elsif category_choice=="6"
-
-  elsif category_choice=="7"
-
-  elsif category_choice=="8"
-
-  else
-    puts "try again!"
-    get_menu_input()
-  end
-
-end
 end
