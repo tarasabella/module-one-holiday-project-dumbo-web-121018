@@ -1,16 +1,22 @@
+require 'tty-prompt'
+
 class CommandLineInterface
+
+#declares prompt as a variable throughout program
+  @@prompt = TTY::Prompt.new
 
   def greet
     puts "Welcome to GoalDigger, a fun and personalized way to stay on track of and kind of life goal!"
   end
 
   def gets_user_input
+#     prompt.ask(‘What is your email?’) { |q| q.validate :email }
     puts  "\nWe're here to keep you motivated and inspire you to continue working toward your goals. Let's get started on your personalized goals board!"
     puts "\n🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃"
-    puts "\nPlease enter your username"
-    username = gets.chomp
-    puts "Please enter your password"
-    password = gets.chomp
+    username = @@prompt.ask("Please enter your username:")
+    password = @@prompt.mask("Please enter your password:")
+    # puts "Please enter your password"
+    # password = gets.chomp
     find_user(username, password)
   end
 
@@ -30,9 +36,18 @@ class CommandLineInterface
     puts "Enter the number associated with the menu item:"
     puts "\t1. Browse Categories"
     puts "\t2. View My Goals Board"
-    puts "\t3. Create a New Goal"
+    puts "\t3. Create A New Goal"
     puts "\t4. Logout"
     menu_choice = gets.chomp
+# @@mm_options = {
+#   "Browse Categories" => -> do browse_categories end,
+#   "View My Goals Board" => -> do view_my_board end,
+#   "Create A New Goal" => -> do create_goals end,
+#   "Logout" => -> do "Thanks for stopping by" end
+# }
+# end
+# end
+
     if menu_choice=="1"
       browse_categories()
     elsif menu_choice=="2"
@@ -43,8 +58,6 @@ class CommandLineInterface
       gets_menu_input(user_id)
     elsif menu_choice=="4"
       puts "Thanks for stopping by!"
-      greet()
-      gets_user_input()
     else
       puts "try again!"
       gets_menu_input(user_id)
@@ -148,6 +161,5 @@ end
 def delete_goal(title_of_goal)
   delete_goal = Goal.find_by(title: title_of_goal)
   delete_goal.destroy
-  # puts hey = Goal.find_by(title: "hey")
-  # hey.destroy
+
 end

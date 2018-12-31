@@ -2,7 +2,6 @@ User.destroy_all
 Category.destroy_all
 Goal.destroy_all
 
-
 tara = User.create(name: "Tara", username: "misubella", password: "tictactoe")
 ben = User.create(name: "Ben", username: "bentay", password: "password")
 
