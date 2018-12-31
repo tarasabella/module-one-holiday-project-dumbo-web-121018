@@ -1,13 +1,11 @@
 class CommandLineInterface
 
-  # myUser = User.new
-
   def greet
     puts "Welcome to GoalDigger, a fun and personalized way to stay on track of and kind of life goal!"
   end
 
   def gets_user_input
-    puts  "\nWe're here to keep you motivated and inspire you to continue pushing toward your goals. Let's get started on your personalized GoalDigger board!"
+    puts  "\nWe're here to keep you motivated and inspire you to continue working toward your goals. Let's get started on your personalized goals board!"
     puts "\n🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃"
     puts "\nPlease enter your username"
     username = gets.chomp
@@ -21,34 +19,35 @@ class CommandLineInterface
     if my_user
       #save user id to reference later on
       puts "\nWelcome, #{my_user.name}!"
-      myUser = my_user
-      gets_menu_input()
+      gets_menu_input(my_user.id)
     else
       puts "no user found!"
       gets_user_input()
     end
   end
 
-  def gets_menu_input
+  def gets_menu_input(user_id)
     puts "Enter the number associated with the menu item:"
     puts "\t1. Browse Categories"
     puts "\t2. View My Goals Board"
-    puts "\t3. Create a new goal"
-    puts "\t4. Log out"
+    puts "\t3. Create a New Goal"
+    puts "\t4. Logout"
     menu_choice = gets.chomp
     if menu_choice=="1"
       browse_categories()
     elsif menu_choice=="2"
-      puts view_my_board()
+      puts view_my_board(user_id)
+      # gets_menu_input(user_id)
     elsif menu_choice=="3"
-      puts create_goals()
+      puts create_goals(user_id)
+      gets_menu_input(user_id)
     elsif menu_choice=="4"
       puts "Thanks for stopping by!"
       greet()
       gets_user_input()
     else
       puts "try again!"
-      gets_menu_input()
+      gets_menu_input(user_id)
     end
   end
 end
@@ -90,32 +89,65 @@ def list_description(goal_description)
 end
 end
 
-def create_goals
+def create_goals(user_id)
   puts "Let's create a personalized goal to add to your board"
   puts "💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻"
   puts "Think of a title for your goal"
   my_goal_title = gets.chomp
   puts "Describe your personalized goal"
   my_goal_description = gets.chomp
-  Goal.create(title: my_goal_title, description: my_goal_description)
+  Goal.create(title: my_goal_title, description: my_goal_description, userid: user_id)
   puts "Yay! You've created a new goal, #{my_goal_title}"
 end
 
-#
-#
-# # def view_my_board(create_goals)
-# #
-# #     puts "#{my_goal_title}"
-# #     puts "#{my_goal_description}"
-# #   # my_new_goal = Goals.create
-#   # new_goal = Goals.create(title: "Eat more vegetables", description: "Make green juices each morning")
-#   # puts Goals.where(description: my_goal_description)
-#   #
-#
-#
-# # def view_my_board
-#   # user_goals = []
-#   # user_goals << my_new_goals
-#
-# # # def add_goal(list_description)
-# # #   Goal.create
+ def view_my_board(user_id)
+  i = 1
+  goals = []
+  # goal_descriptions = []
+  # #save goal choice to an array with variable
+  # my_goal_board = Goal.find_by(userid: user_id)
+  puts "Enter the number associated with the goal listed to perform an action:\n\n"
+  Goal.where(userid: user_id).find_each do |goal|
+    puts "\t#{i}. #{goal.title}, #{goal.description}"
+    goals << goal
+    i+= 1
+  end
+  user_input = gets.chomp
+  goal_menu(user_id, goals[Integer(user_input) - 1])
+end
+
+def goal_menu(user_id, goal)
+  puts "What would you like to do with this goal?"
+  puts "\t1. Edit Goal"
+  puts "\t2. Delete Goal"
+  puts "\t3. Return to Goals Board"
+  menu_choice = gets.chomp
+  if menu_choice=="1"
+    puts "Let's edit your goal!"
+    puts "Original title: #{goal.title}"
+    puts "Enter your new title:"
+    goal.title = gets.chomp
+    puts "Original description: #{goal.description}"
+    puts "Enter your new description:"
+    goal.description = gets.chomp
+    goal.save
+    puts "Yay! You've saved your updated goal, #{goal.title}"
+    view_my_board(user_id)
+  elsif menu_choice=="2"
+    goal.destroy
+    puts "Goal deleted!"
+    view_my_board(user_id)
+  elsif menu_choice=="3"
+    view_my_board(user_id)
+  else
+    puts "try again!"
+    goal_menu(user_id, goal_id)
+  end
+end
+
+def delete_goal(title_of_goal)
+  delete_goal = Goal.find_by(title: title_of_goal)
+  delete_goal.destroy
+  # puts hey = Goal.find_by(title: "hey")
+  # hey.destroy
+end

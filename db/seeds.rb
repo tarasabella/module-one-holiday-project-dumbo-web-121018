@@ -1,3 +1,8 @@
+User.destroy_all
+Category.destroy_all
+Goal.destroy_all
+
+
 tara = User.create(name: "Tara", username: "misubella", password: "tictactoe")
 ben = User.create(name: "Ben", username: "bentay", password: "password")
 
@@ -21,7 +26,3 @@ goal8 = Goal.create(title: "Learn To Cope With Stress Through Meditation", descr
 goal9 = Goal.create(title: "Learn To Cope With Stress Through Meditation", description: "", categoryid: personalDevelopment.id, userid:tara.id)
 goal10 = Goal.create(title: "Learn To Cope With Stress Through Meditation", description: "", categoryid: personalDevelopment.id, userid:tara.id)
 goal11 = Goal.create(title: "Learn To Cope With Stress Through Meditation", description: "", categoryid: personalDevelopment.id, userid:tara.id)
-
-# goal1.categoryid << healthAndFitness
-
-# relationship.goals << goal2
