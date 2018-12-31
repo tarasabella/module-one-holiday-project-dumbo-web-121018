@@ -11,7 +11,7 @@ travel = Category.create(name: "Travel Goals ✈️")
 personalDevelopment = Category.create(name: "Personal Development Goals 💪🏻")
 
 goal1 = Goal.create(title: "Be More Consistent With Your Workout Routine", description: "Create a habit of morning exercise to boost your metabolism, work towards your physical fitness, develop self-discipline, and improve your focus and mental energy.\nTip 1: Plan ahead by setting an alarm and laying your gym clothes out.\nTip 2: Approach your workout plan by starting small and building up in intensity and frequency to get you into the habit of working out in the morning consistently.\nTip 3: Associate your exercise routine with a positive reward to reinforce the habit.", categoryid: healthAndFitness.id, userid:tara.id)
-goal2 = Goal.create(title: "Stay Hydrated", description: "", categoryid: healthAndFitness.id, userid:tara.id)
+goal2 = Goal.create(title: "Stay Hydrated", description: "Drink 8-10 glasses of water daily", categoryid: healthAndFitness.id, userid:tara.id)
 goal3 = Goal.create(title: "Learn To Cope With Stress Through Meditation", description: "", categoryid: financial.id, userid:tara.id)
 goal4 = Goal.create(title: "Learn To Cope With Stress Through Meditation", description: "", categoryid: career.id, userid:tara.id)
 goal5 = Goal.create(title: "Learn To Cope With Stress Through Meditation", description: "", categoryid: educational.id, userid:tara.id)
