@@ -2,7 +2,8 @@ User.destroy_all
 Category.destroy_all
 Goal.destroy_all
 
-tara = User.create(name: "Tara", username: "misubella", password: "tictactoe")
+#tara = User.create(name: "Tara", username: "misubella", password: "tictactoe")
+tara = User.create(name: "Tara", username: "a", password: "a")
 ben = User.create(name: "Ben", username: "bentay", password: "password")
 
 healthAndFitness = Category.create(name: "Health and Fitness Goals 🏋🏼‍")
