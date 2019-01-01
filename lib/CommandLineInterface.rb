@@ -2,8 +2,9 @@ require 'tty-prompt'
 
 class CommandLineInterface
 
-#declares prompt as a variable throughout program
+#declares prompt and my_user as a variable throughout program
   @@prompt = TTY::Prompt.new
+  @@my_user = User.new
 
   def greet
     puts "Welcome to GoalDigger, a fun and personalized way to stay on track of any kind of life goal!"
@@ -23,21 +24,22 @@ class CommandLineInterface
   def find_user(username, password)
     my_user = User.find_by(username:username, password:password)
     if my_user
+      @@my_user = my_user
       #save user id to reference later on
-      puts "\nWelcome, #{my_user.name}!"
-      gets_menu_input(my_user)
+      puts "\nWelcome, #{@@my_user.name}!"
+      gets_menu_input()
     else
       puts "no user found!"
       gets_user_input()
     end
   end
 
-  def gets_menu_input(my_user)
+  def gets_menu_input()
   mm_options = {
     "Browse Categories" => -> do browse_categories end,
-    "View My Goals Board" => -> do view_my_board(my_user.id) end,
-    "Create A New Goal" => -> do create_goals(my_user.id) end,
-    "Logout" => -> do puts "Thanks for stopping by, #{my_user.name}!" end
+    "View My Goals Board" => -> do view_my_board() end,
+    "Create A New Goal" => -> do create_goals() end,
+    "Logout" => -> do puts "Thanks for stopping by, #{@@my_user.name}!" end
     }
     @@prompt.select("Choose from the menu below:", mm_options)
 
@@ -59,69 +61,94 @@ class CommandLineInterface
 
   #pass category_id as argument and from the list of goals find where category id = whats passed in
   def list_goals(category_id)
-    i = 1
-    goal_descriptions = []
+
     #save goal choice to an array with variable
     goal_choices = Goal.where(categoryid: category_id)
-    goal_choices.each do |goal|
-      puts "#{i}. #{goal.title}"
-      goal_descriptions << goal.description
-      i += 1
-    end
-    puts "Enter the number associated with a title to view its description"
-    title_choice = gets.chomp
-    list_description(goal_descriptions[Integer(title_choice)-1])
-  end
 
-
-  def list_description(goal_description)
-    goal_description = Goal.where(description: goal_description)
-    goal_description.each do |title|
-      puts "#{title.description}"
+    @@prompt.select('Select a goal to view its details:') do |menu|
+      goal_choices.each do |goal|
+        menu.choice goal.title, -> { list_details(goal) }
+      end
     end
   end
 
-  def create_goals(user_id)
+  def list_details(goal)
+
+    puts "Title: #{goal.title}"
+    puts "Description: #{goal.description}"
+
+    if goal.userid == @@my_user.id
+      # don't let user add to their board if it's already theirs
+      gm_options =
+      {
+        "Return To Categories" => -> do view_my_board() end
+      }
+    else
+      gm_options =
+      {
+        "Add Goal To My Board" => -> do add_this_goal(goal) {"This goal has been added to your goals board!"} end,
+        "Return To Categories" => -> do view_my_board() end
+      }
+    end
+    @@prompt.select("What would you like to do with this goal?", gm_options)
+
+  end
+
+  def add_this_goal(goal)
+  puts "Let's add #{goal.title} to your board!"
+  copied_goal = Goal.create(title: goal.title, description: goal.description, userid: @@my_user.id, categoryid: goal.categoryid)
+  copied_goal.save
+  puts "Yay! You've added a new goal to your board!"
+  view_my_board()
+end
+
+  def create_goals()
     puts "Let's create a personalized goal to add to your board"
     puts "💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻"
     puts "Think of a title for your goal"
     my_goal_title = gets.chomp
     puts "Describe your personalized goal"
     my_goal_description = gets.chomp
-    Goal.create(title: my_goal_title, description: my_goal_description, userid: user_id)
+    category_choices = Category.all
+    prompt_result = @@prompt.select('Select a category for this goal:') do |menu|
+      category_choices.each do |category|
+        menu.choice category.name, category.id
+      end
+    end
+    # puts "this! #{return_value}"
+    Goal.create(title: my_goal_title, description: my_goal_description, userid: @@my_user.id, categoryid: prompt_result)
     puts "Yay! You've created a new goal, #{my_goal_title}"
   end
 
-  def view_my_board(user_id)
+  def view_my_board()
     i = 1
     goals = []
-    # goal_descriptions = []
     # save goal choice to an array with variable
     puts "Enter the number associated with the goal listed to perform an action:\n\n"
-    Goal.where(userid: user_id).find_each do |goal|
-      puts "\t#{i}. #{goal.title}, #{goal.description}"
+    Goal.where(userid: @@my_user.id).find_each do |goal|
+      puts "#{i}. #{goal.title}, #{goal.description}"
       goals << goal
       i+= 1
     end
     user_input = gets.chomp
-    goal_menu(user_id, goals[Integer(user_input) - 1])
+    goal_menu(goals[Integer(user_input) - 1])
   end
 
-  def goal_menu(user_id, goal)
+  def goal_menu(goal)
     gm_options =
     {
       "Edit Goal" => -> do edit_goal(goal) end,
-      "Delete Goal" => -> do delete_goal(goal,user_id) {"This goal has been deleted!"} end,
-      "Return To Goals Board" => -> do view_my_board(user_id) end
+      "Delete Goal" => -> do delete_goal(goal) {"This goal has been deleted!"} end,
+      "Return To Goals Board" => -> do view_my_board() end
     }
     @@prompt.select("What would you like to do with this goal?", gm_options)
 
   end
 
-  def delete_goal(goal, user_id)
+  def delete_goal(goal)
     goal.destroy
     puts "This goal has been deleted!"
-    view_my_board(user_id)
+    view_my_board()
   end
 
   def edit_goal(goal)
