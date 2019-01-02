@@ -28,6 +28,7 @@ class CommandLineInterface
     if my_user
       @@my_user = my_user
       #save user id to reference later on
+      puts `clear`
       puts "\nWelcome, #{@@my_user.name}!"
       gets_menu_input()
     else
@@ -51,7 +52,7 @@ class CommandLineInterface
   def browse_categories
 
     category_choices = Category.all
-
+    puts `clear`
     @@prompt.select("Select a category!:") do |menu|
       category_choices.each do |category|
         menu.choice category.name, -> { list_goals(category.id) }
@@ -75,8 +76,8 @@ class CommandLineInterface
 
   def list_details(goal)
 
-    puts "Title: #{goal.title}"
-    puts "Description: #{goal.description}"
+    @@prompt.warn ("Title: #{goal.title}")
+    @@prompt.warn ("\nDescription: #{goal.description}")
 
     if goal.userid == @@my_user.id
       # don't let user add to their board if it's already theirs
