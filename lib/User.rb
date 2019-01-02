@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-has_many :categories, through: :goals
+has_many :goals, through: :categories
 
 def categories
   goals.map do |goal|
