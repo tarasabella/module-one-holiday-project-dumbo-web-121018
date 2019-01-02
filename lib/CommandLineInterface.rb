@@ -82,16 +82,16 @@ class CommandLineInterface
       # don't let user add to their board if it's already theirs
       gm_options =
       {
-        "Return To Categories" => -> do view_my_board() end
+        "Return To My Board" => -> do view_my_board() {"This goal already exists on your board!"} end
       }
     else
       gm_options =
       {
         "Add Goal To My Board" => -> do add_this_goal(goal) {"This goal has been added to your goals board!"} end,
-        "Return To Categories" => -> do view_my_board() end
+        "Return To My Board" => -> do view_my_board() end
       }
     end
-    @@prompt.select("What would you like to do with this goal?", gm_options)
+    @@prompt.select("What would you like to do?:", gm_options)
 
   end
 
@@ -104,11 +104,11 @@ class CommandLineInterface
 end
 
   def create_goals()
-    puts "Let's create a personalized goal to add to your board"
-    puts "💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻"
-    puts "Think of a title for your goal"
+    puts "Yay! Let's create a personalized goal to add to your board"
+    puts "💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻"
+    @@prompt.warn("\nCreate a Title for Your Goal:")
     my_goal_title = gets.chomp
-    puts "Describe your personalized goal"
+    @@prompt.warn("\nDescribe Your Goal:")
     my_goal_description = gets.chomp
     category_choices = Category.all
     prompt_result = @@prompt.select('Select a category for this goal:') do |menu|
@@ -116,9 +116,9 @@ end
         menu.choice category.name, category.id
       end
     end
-    # puts "this! #{return_value}"
     Goal.create(title: my_goal_title, description: my_goal_description, userid: @@my_user.id, categoryid: prompt_result)
     puts "Yay! You've created a new goal, #{my_goal_title}"
+    view_my_board()
   end
 
   def view_my_board()
@@ -149,12 +149,12 @@ end
 
   def delete_goal(goal)
     goal.destroy
-    puts "This goal has been deleted!"
+    @@prompt.error("\nThis goal has been deleted!")
     view_my_board()
   end
 
   def edit_goal(goal)
-    puts "Let's edit your goal!"
+    puts "Okay, great...Let's edit your goal!"
     puts "Original title: #{goal.title}"
     puts "Enter your new title:"
     goal.title = gets.chomp
@@ -162,7 +162,8 @@ end
     puts "Enter your new description:"
     goal.description = gets.chomp
     goal.save
-    puts "Yay! You've saved your updated goal, #{goal.title}"
+    @@prompt.warn("\nAwesome! You've updated your goal, #{goal.title}")
+    gets_menu_input()
   end
 
 end
