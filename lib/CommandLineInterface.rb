@@ -7,13 +7,14 @@ class CommandLineInterface
   @@my_user = User.new
 
   def greet
-    @@prompt.warn("Welcome to GoalDigger, a fun & personalized way to stay on track of your life goals!")
+    @@prompt.warn("Welcome to GoalDigger, a fun & personalized way to stay on track of any kind of life goal!")
     puts "🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩"
   end
 
   def gets_user_input
     @@prompt.ok("\nWe're here to keep you motivated and inspire you to continue working toward your goals.")
-    @@prompt.error("Let's start creating your goals board with GoalDigger! 👩🏼‍🎨✨🌈👨🏻‍🎨✨🌈‍‍")
+    @@prompt.warn("\nLet's start creating your board!")
+    puts "👩🏼‍🎨✨🌈👨🏻‍🎨✨🌈‍‍"
 
     username = @@prompt.ask("\nPlease enter your username:")
     password = @@prompt.mask("Please enter your password:")
