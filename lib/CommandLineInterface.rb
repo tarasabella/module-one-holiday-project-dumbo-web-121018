@@ -38,13 +38,14 @@ class CommandLineInterface
   end
 
   def gets_menu_input()
+  puts `clear`
   mm_options = {
     "Browse Categories" => -> do browse_categories end,
     "View My Goals Board" => -> do view_my_board() end,
     "Create A New Goal" => -> do create_goals() end,
-    "Logout" => -> do puts "Thanks for stopping by, #{@@my_user.name}!" end
+    "Logout" => -> do puts "Thanks for stopping by, #{@@my_user.name}! 👋🏻" end
     }
-    @@prompt.select("Choose from the menu below:", mm_options)
+    @@prompt.select("Choose from the Menu Below:", mm_options)
 
 
   end
@@ -53,7 +54,7 @@ class CommandLineInterface
 
     category_choices = Category.all
     puts `clear`
-    @@prompt.select("Select a category!:") do |menu|
+    @@prompt.select("Select a Category!:") do |menu|
       category_choices.each do |category|
         menu.choice category.name, -> { list_goals(category.id) }
       end
@@ -67,7 +68,7 @@ class CommandLineInterface
     #save goal choice to an array with variable
     goal_choices = Goal.where(categoryid: category_id)
 
-    @@prompt.select('Select a goal to view its details:') do |menu|
+    @@prompt.select('Select a Goal to View its Details:') do |menu|
       goal_choices.each do |goal|
         menu.choice goal.title, -> { list_details(goal) }
       end
@@ -83,8 +84,10 @@ class CommandLineInterface
       # don't let user add to their board if it's already theirs
       gm_options =
       {
-        "Return To My Board" => -> do view_my_board() {"This goal already exists on your board!"} end
+        "Return To My Board" => -> do view_my_board() {"This goal already exists on your board!"} end,
+        "Return To Main Menu" => -> do gets_menu_input() end
       }
+
     else
       gm_options =
       {
@@ -92,7 +95,7 @@ class CommandLineInterface
         "Return To My Board" => -> do view_my_board() end
       }
     end
-    @@prompt.select("What would you like to do?:", gm_options)
+    @@prompt.select("What Would You Like To Do?:", gm_options)
 
   end
 
@@ -112,7 +115,7 @@ end
     @@prompt.warn("\nDescribe Your Goal:")
     my_goal_description = gets.chomp
     category_choices = Category.all
-    prompt_result = @@prompt.select('Select a category for this goal:') do |menu|
+    prompt_result = @@prompt.select('Select a Category For This Goal:') do |menu|
       category_choices.each do |category|
         menu.choice category.name, category.id
       end
@@ -123,13 +126,24 @@ end
   end
 
   def view_my_board()
+
+  #
+
+  #my_goals = Goal.where(userid: @@my_user.id)
+  #  @@prompt.select("Select a Goal Title to View its Description:")  do |menu|
+  #     my_goals.each do |goal|
+  #     menu.choice goal.title, -> { list_details(goal) }
+  #     end
+  #   end
+  # end
     #puts goal title and option to select for its description
     i = 1
     goals = []
     # save goal choice to an array with variable
     puts "Enter the number associated with the goal listed to perform an action:\n\n"
     Goal.where(userid: @@my_user.id).find_each do |goal|
-      puts "#{i}. #{goal.title}, #{goal.description}"
+      @@prompt.warn("\n#{i}. #{goal.title}")
+      @@prompt.ok("n#{goal.description}")
       goals << goal
       i+= 1
     end
@@ -144,7 +158,7 @@ end
       "Delete Goal" => -> do delete_goal(goal) {"This goal has been deleted!"} end,
       "Return To Goals Board" => -> do view_my_board() end
     }
-    @@prompt.select("What would you like to do with this goal?", gm_options)
+    @@prompt.select("What Would You Like to Do With This Goal?", gm_options)
 
   end
 
@@ -156,11 +170,11 @@ end
 
   def edit_goal(goal)
     puts "Okay, great...Let's edit your goal!"
-    puts "Original title: #{goal.title}"
-    puts "Enter your new title:"
+    @@prompt.warn("Original Title: #{goal.title}")
+    @@prompt.ok("Enter Your New Title:")
     goal.title = gets.chomp
-    puts "Original description: #{goal.description}"
-    puts "Enter your new description:"
+    @@prompt.warn("Original Description: #{goal.description}")
+    @@prompt.ok("Enter Your New Description:")
     goal.description = gets.chomp
     goal.save
     @@prompt.warn("\nAwesome! You've updated your goal, #{goal.title}")
