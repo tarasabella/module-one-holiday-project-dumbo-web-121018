@@ -7,14 +7,15 @@ class CommandLineInterface
   @@my_user = User.new
 
   def greet
-    puts "Welcome to GoalDigger, a fun and personalized way to stay on track of any kind of life goal!"
+    @@prompt.warn("Welcome to GoalDigger, a fun & personalized way to stay on track of your life goals!")
+    puts "🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩"
   end
 
   def gets_user_input
-#     prompt.ask(‘What is your email?’) { |q| q.validate :email }
-    puts  "\nWe're here to keep you motivated and inspire you to continue working toward your goals. Let's get started on your personalized goals board!"
-    puts "\n🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃"
-    username = @@prompt.ask("Please enter your username:")
+    @@prompt.ok("\nWe're here to keep you motivated and inspire you to continue working toward your goals.")
+    @@prompt.error("Let's start creating your goals board with GoalDigger! 👩🏼‍🎨✨🌈👨🏻‍🎨✨🌈‍‍")
+
+    username = @@prompt.ask("\nPlease enter your username:")
     password = @@prompt.mask("Please enter your password:")
     # puts "Please enter your gpassword"
     # password = gets.chomp
@@ -47,16 +48,15 @@ class CommandLineInterface
   end
 
   def browse_categories
-    i = 1
-    category_ids = []
-    Category.all.each do |category|
-      puts "#{i}. #{category.name}"
-      category_ids << category.id
-      i+= 1
+
+    category_choices = Category.all
+
+    @@prompt.select("Select a category!:") do |menu|
+      category_choices.each do |category|
+        menu.choice category.name, -> { list_goals(category.id) }
+      end
     end
-    puts "Enter the number associated with category you would like to view"
-    category_choice = gets.chomp
-    list_goals(category_ids[Integer(category_choice)-1])
+
   end
 
   #pass category_id as argument and from the list of goals find where category id = whats passed in
@@ -121,6 +121,7 @@ end
   end
 
   def view_my_board()
+    #puts goal title and option to select for its description
     i = 1
     goals = []
     # save goal choice to an array with variable
