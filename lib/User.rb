@@ -1,14 +1,12 @@
 class User < ActiveRecord::Base
 
-has_many :goals, through: :categories
+has_many :goals
+has_many :categories, through: :goals
 
 def categories
   goals.map do |goal|
     goal.categories
+    end
   end
-# def categories
-#   Category.where(category_id: self:id)
-# end
-
-end
+  
 end
