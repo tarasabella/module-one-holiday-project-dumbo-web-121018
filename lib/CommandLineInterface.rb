@@ -7,15 +7,16 @@ class CommandLineInterface
   @@my_user = User.new
 
   def greet
-    @@prompt.warn("Welcome to GoalDigger, a fun & personalized way to stay on track of any kind of life goal!")
-    puts "🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩"
+    @@prompt.warn("Welcome to GoalDigger, a personalized goal board to keep track of your life goals! 🌈✨")
+    @@prompt.ok("\nWe're happy to have you! Our mission is to help motivate & inspire YOU to become a better version of yourself.")
+    @@prompt.warn("\nSo get ready to have some fun as you \n...CREATE your goals, \n......WORK towards them & \n.........ACHIEVE them!")
+    puts "🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩"
   end
 
   def gets_user_input
-    @@prompt.ok("\nWe're here to keep you motivated and inspire you to continue working toward your goals.")
-    @@prompt.warn("\nLet's start creating your board!")
-    puts "👩🏼‍🎨✨🌈👨🏻‍🎨✨🌈‍‍"
-
+    @@prompt.error("\nLet's get to work & start creating your board!")
+    puts "\n👩🏼‍🎨✨🌈👨🏻‍🎨✨🌈‍‍"
+    puts `clear`
     username = @@prompt.ask("\nPlease enter your username:")
     password = @@prompt.mask("Please enter your password:")
     # puts "Please enter your gpassword"
@@ -29,7 +30,9 @@ class CommandLineInterface
       @@my_user = my_user
       #save user id to reference later on
       puts `clear`
-      puts "\nWelcome, #{@@my_user.name}!"
+
+
+      @@prompt.warn("\nHey, #{@@my_user.name}! Now it's time to start dreaming...start working...start achieving. Let's start goal digging 😜")
       gets_menu_input()
     else
       puts "no user found!"
@@ -64,7 +67,7 @@ class CommandLineInterface
 
   #pass category_id as argument and from the list of goals find where category id = whats passed in
   def list_goals(category_id)
-
+    puts `clear`
     #save goal choice to an array with variable
     goal_choices = Goal.where(categoryid: category_id)
 
@@ -76,7 +79,7 @@ class CommandLineInterface
   end
 
   def list_details(goal)
-
+    puts `clear`
     @@prompt.warn ("Title: #{goal.title}")
     @@prompt.warn ("\nDescription: #{goal.description}")
 
@@ -108,6 +111,7 @@ class CommandLineInterface
 end
 
   def create_goals()
+    puts `clear`
     puts "Yay! Let's create a personalized goal to add to your board"
     puts "💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻"
     @@prompt.warn("\nCreate a Title for Your Goal:")
@@ -127,7 +131,7 @@ end
 
   def view_my_board()
 
-  #
+  puts `clear`
 
   #my_goals = Goal.where(userid: @@my_user.id)
   #  @@prompt.select("Select a Goal Title to View its Description:")  do |menu|
@@ -158,17 +162,20 @@ end
       "Delete Goal" => -> do delete_goal(goal) {"This goal has been deleted!"} end,
       "Return To Goals Board" => -> do view_my_board() end
     }
+    puts `clear`
     @@prompt.select("What Would You Like to Do With This Goal?", gm_options)
 
   end
 
   def delete_goal(goal)
     goal.destroy
-    @@prompt.error("\nThis goal has been deleted!")
+    @@prompt.error("This Goal Has Been DELETED!")
+    puts "😵😵😵"
     view_my_board()
   end
 
   def edit_goal(goal)
+    puts `clear`
     puts "Okay, great...Let's edit your goal!"
     @@prompt.warn("Original Title: #{goal.title}")
     @@prompt.ok("Enter Your New Title:")
@@ -177,7 +184,7 @@ end
     @@prompt.ok("Enter Your New Description:")
     goal.description = gets.chomp
     goal.save
-    @@prompt.warn("\nAwesome! You've updated your goal, #{goal.title}")
+    @@prompt.warn("\nAwesome! You've Updated Your Goal, #{goal.title}")
     gets_menu_input()
   end
 
