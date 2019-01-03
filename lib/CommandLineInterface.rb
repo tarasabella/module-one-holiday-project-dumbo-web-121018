@@ -10,7 +10,7 @@ class CommandLineInterface
     @@prompt.warn("Welcome to GoalDigger! 🌈✨")
       #a personalized goal board to keep track of your life goals!} ")
     `say "Welcome to GOAL DIGGER!! our personalized goal board to keep track of YOUR life goals!"`
-    @@prompt.ok("\nOur mission is to help motivate & inspire YOU to become a better version of yourself.")
+    @@prompt.error("\nOur mission is to help motivate & inspire YOU to become a better version of yourself.")
         #  "We're happy to have you! "
     `say "We're happy to have you join us! Our mission is to help motivate & inspire YOU to become a better version of yourself"`
     @@prompt.warn("\n...CREATE your goals")
@@ -37,7 +37,8 @@ class CommandLineInterface
       @@my_user = my_user
       #save user id to reference later on
       puts `clear`
-      @@prompt.warn("\nHey, #{@@my_user.name}! \nLet's get GOAL DIGGING 😜")
+      @@prompt.warn("\nHey, #{@@my_user.name}!")
+      @@prompt.ok("\nLet's get GOAL DIGGING 😜")
       `say "Wow, this is exciting...you are on your way to becoming a true, goal digger,...now it is time to start dreaming...start working...start achieving. Let's get goal digging!!!"`
       gets_menu_input()
     else
@@ -55,7 +56,7 @@ end
     "Logout" => -> do puts "Thanks for stopping by, #{@@my_user.name}! 👋🏻" end
     }
     @@prompt.select("Choose from the Menu Below:", mm_options)
-    `say "Choose an option from the menu below"`
+
   end
 
   def browse_categories
@@ -110,13 +111,13 @@ end
   puts "Let's add #{goal.title} to your board!"
   copied_goal = Goal.create(title: goal.title, description: goal.description, userid: @@my_user.id, categoryid: goal.categoryid)
   copied_goal.save
-  puts "Yay! You've added a new goal to your board!"
+  `say "Yay! You've added a new goal to your board!"`
   view_my_board()
 end
 
   def create_goals()
     puts `clear`
-    puts "Yay! Let's create a personalized goal to add to your board"
+    `say "Yay! Let's create a personalized goal to add to your board"`
     puts "💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻"
     @@prompt.warn("\nCreate a Title for Your Goal:")
     my_goal_title = gets.chomp
@@ -147,7 +148,8 @@ end
     i = 1
     goals = []
     # save goal choice to an array with variable
-    puts "Enter the number associated with the goal listed to perform an action:\n\n"
+    puts "Enter the Number Associated With One of Your Goals:\n\n"
+      `say "Enter the number associated with one of your goals to perform an action"`
     Goal.where(userid: @@my_user.id).find_each do |goal|
       @@prompt.warn("\n#{i}. #{goal.title}")
       @@prompt.ok("n#{goal.description}")
@@ -179,7 +181,7 @@ end
 
   def edit_goal(goal)
     puts `clear`
-    puts "Okay, great...Let's edit your goal!"
+    `says "Okay, great...Let's edit your goal!"`
     @@prompt.warn("Original Title: #{goal.title}")
     @@prompt.ok("Enter Your New Title:")
     goal.title = gets.chomp
@@ -187,7 +189,8 @@ end
     @@prompt.ok("Enter Your New Description:")
     goal.description = gets.chomp
     goal.save
-    @@prompt.warn("\nAwesome! You've Updated Your Goal, #{goal.title}")
+    @@prompt.warn("\nYou've Updated Your Goal, #{goal.title}")
+    `says `
     gets_menu_input()
   end
 end
