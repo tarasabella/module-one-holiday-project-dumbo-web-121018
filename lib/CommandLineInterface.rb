@@ -7,20 +7,27 @@ class CommandLineInterface
   @@my_user = User.new
 
   def greet
-    @@prompt.warn("Welcome to GoalDigger, a personalized goal board to keep track of your life goals! 🌈✨")
-    @@prompt.ok("\nWe're happy to have you! Our mission is to help motivate & inspire YOU to become a better version of yourself.")
-    @@prompt.warn("\nSo get ready to have some fun as you \n...CREATE your goals, \n......WORK towards them & \n.........ACHIEVE them!")
+    @@prompt.warn("Welcome to GoalDigger! 🌈✨")
+      #a personalized goal board to keep track of your life goals!} ")
+    `say "Welcome to GOAL DIGGER!! our personalized goal board to keep track of YOUR life goals!"`
+    @@prompt.ok("\nOur mission is to help motivate & inspire YOU to become a better version of yourself.")
+        #  "We're happy to have you! "
+    `say "We're happy to have you join us! Our mission is to help motivate & inspire YOU to become a better version of yourself"`
+    @@prompt.warn("\n...CREATE your goals")
+    @@prompt.warn("\n......WORK towards them")
+    @@prompt.warn("\n.........& ACHIEVE them!")
+      #"So get ready to have some fun as you"
     puts "🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩"
+    `say "So get ready to have some fun as you...CREATE your goals, ......WORK towards them and most importantly,.........ACHIEVE them!"`
   end
 
   def gets_user_input
-    @@prompt.error("\nLet's get to work & start creating your board!")
-    puts "\n👩🏼‍🎨✨🌈👨🏻‍🎨✨🌈‍‍"
+    `say  "I think..., it is about TIME we make you a goal DIGGER"`
+    @@prompt.error("\nLET'S START CREATING!\n👩🏼‍🎨✨🌈👨🏻‍🎨✨🌈‍‍")
+    `say "Let's login so we can start creating your board!"`
     puts `clear`
     username = @@prompt.ask("\nPlease enter your username:")
     password = @@prompt.mask("Please enter your password:")
-    # puts "Please enter your gpassword"
-    # password = gets.chomp
     find_user(username, password)
   end
 
@@ -30,27 +37,25 @@ class CommandLineInterface
       @@my_user = my_user
       #save user id to reference later on
       puts `clear`
-
-
-      @@prompt.warn("\nHey, #{@@my_user.name}! Now it's time to start dreaming...start working...start achieving. Let's start goal digging 😜")
+      @@prompt.warn("\nHey, #{@@my_user.name}! \nLet's get GOAL DIGGING 😜")
+      `say "Wow, this is exciting...you are on your way to becoming a true, goal digger,...now it is time to start dreaming...start working...start achieving. Let's get goal digging!!!"`
       gets_menu_input()
     else
-      puts "no user found!"
+      @@prompt.error("Sorry, No User Found!")
+      `say "Sorry, No User Found!"`
       gets_user_input()
-    end
   end
-
+end
   def gets_menu_input()
-  puts `clear`
-  mm_options = {
+    puts `clear`
+    mm_options = {
     "Browse Categories" => -> do browse_categories end,
     "View My Goals Board" => -> do view_my_board() end,
     "Create A New Goal" => -> do create_goals() end,
     "Logout" => -> do puts "Thanks for stopping by, #{@@my_user.name}! 👋🏻" end
     }
     @@prompt.select("Choose from the Menu Below:", mm_options)
-
-
+    `say "Choose an option from the menu below"`
   end
 
   def browse_categories
@@ -62,7 +67,6 @@ class CommandLineInterface
         menu.choice category.name, -> { list_goals(category.id) }
       end
     end
-
   end
 
   #pass category_id as argument and from the list of goals find where category id = whats passed in
@@ -130,7 +134,6 @@ end
   end
 
   def view_my_board()
-
   puts `clear`
 
   #my_goals = Goal.where(userid: @@my_user.id)
@@ -187,5 +190,4 @@ end
     @@prompt.warn("\nAwesome! You've Updated Your Goal, #{goal.title}")
     gets_menu_input()
   end
-
 end
