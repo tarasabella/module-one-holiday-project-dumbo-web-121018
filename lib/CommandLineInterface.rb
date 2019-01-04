@@ -8,21 +8,23 @@ class CommandLineInterface
 
   def greet
     @@prompt.warn("Welcome to GoalDigger! 🌈✨")
+
       #a personalized goal board to keep track of your life goals!} ")
-    `say "Welcome to GOAL DIGGER!! our personalized goal board to keep track of YOUR life goals!"`
+    `say "Welcome to GOAL DIGGER!! our personalized goal board will help you keep track of YOUR life goals!"`
     @@prompt.error("\nOur mission is to help motivate & inspire YOU to become a better version of yourself.")
-        #  "We're happy to have you! "
+
     `say "We're happy to have you join us! Our mission is to help motivate & inspire YOU to become a better version of yourself"`
-    @@prompt.warn("\n...CREATE your goals")
-    @@prompt.warn("\n......WORK towards them")
-    @@prompt.warn("\n.........& ACHIEVE them!")
+    @@prompt.warn("\n✅...CREATE your goals")
+    @@prompt.warn("\n✅...WORK towards them")
+    @@prompt.warn("\n✅...& ACHIEVE them!")
       #"So get ready to have some fun as you"
     puts "🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩🤩"
-    `say "So get ready to have some fun as you...CREATE your goals, ......WORK towards them and most importantly,.........ACHIEVE them!"`
+    `say "So get ready to have some fun as you...CREATE your goals, ......WORK towards them and most importantly,.........strive to ACHIEVE them!\n....................."`
   end
 
   def gets_user_input
-    `say  "I think..., it is about TIME we make you a goal DIGGER"`
+    puts `clear`
+    `say  "I think..., it is about TIME we turn you into a goal DIGGER"`
     @@prompt.error("\nLET'S START CREATING!\n👩🏼‍🎨✨🌈👨🏻‍🎨✨🌈‍‍")
     `say "Let's login so we can start creating your board!"`
     puts `clear`
@@ -32,14 +34,14 @@ class CommandLineInterface
   end
 
   def find_user(username, password)
+    puts `clear`
     my_user = User.find_by(username:username, password:password)
     if my_user
       @@my_user = my_user
       #save user id to reference later on
-      puts `clear`
       @@prompt.warn("\nHey, #{@@my_user.name}!")
       @@prompt.ok("\nLet's get GOAL DIGGING 😜")
-      `say "Wow, this is exciting...you are on your way to becoming a true, goal digger,...now it is time to start dreaming...start working...start achieving. Let's get goal digging!!!"`
+      `say "Wow, this is exciting...you are on your way to becoming a true, goal digger,...now it is time to start dreaming...start working...start achieving., In other words, let's get goal DIGGING,!!!"`
       gets_menu_input()
     else
       @@prompt.error("Sorry, No User Found!")
@@ -53,10 +55,15 @@ end
     "Browse Categories" => -> do browse_categories end,
     "View My Goals Board" => -> do view_my_board() end,
     "Create A New Goal" => -> do create_goals() end,
-    "Logout" => -> do puts "Thanks for stopping by, #{@@my_user.name}! 👋🏻" end
-    }
+    "Logout" => -> do logout() end
+  }
     @@prompt.select("Choose from the Menu Below:", mm_options)
 
+  end
+  def logout()
+    @@prompt.warn("See you soon, #{@@my_user.name}! 👋🏻")
+    `say "Thank you for using Goal DIGGER! Stay focused on your goals. And always remember, the future depends on what YOU do, today. By the way, Gonedee said THAT. We should really listen to him more often,...He knows what's up"`
+    #to ask yourself,...Is what you are doing today..., getting you closer, to where you want to be,...,tomorrow?,..........."`
   end
 
   def browse_categories
@@ -117,25 +124,28 @@ end
 
   def create_goals()
     puts `clear`
-    `say "Yay! Let's create a personalized goal to add to your board"`
+    `say "Hooray. Let's create a personalized goal to add to your board. This is exciting"`
     puts "💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻💃🏼🕺🏻"
     @@prompt.warn("\nCreate a Title for Your Goal:")
     my_goal_title = gets.chomp
     @@prompt.warn("\nDescribe Your Goal:")
     my_goal_description = gets.chomp
     category_choices = Category.all
+    puts "\n✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨"
+    `say "Wow, I love your new goal. Select a category for it"`
     prompt_result = @@prompt.select('Select a Category For This Goal:') do |menu|
       category_choices.each do |category|
         menu.choice category.name, category.id
       end
     end
     Goal.create(title: my_goal_title, description: my_goal_description, userid: @@my_user.id, categoryid: prompt_result)
-    puts "Yay! You've created a new goal, #{my_goal_title}"
+    puts "You've Created a New Goal, #{my_goal_title}"
+    `say "You have created a new goal. You should be proud of yourself for being proactive and working toward forming healthier habits. Now, let's work on making this goal a reality\n...........................!"`
     view_my_board()
   end
 
   def view_my_board()
-  puts `clear`
+    puts `clear`
 
   #my_goals = Goal.where(userid: @@my_user.id)
   #  @@prompt.select("Select a Goal Title to View its Description:")  do |menu|
@@ -158,7 +168,10 @@ end
     end
     user_input = gets.chomp
     goal_menu(goals[Integer(user_input) - 1])
+      gets_menu_input()
   end
+
+
 
   def goal_menu(goal)
     gm_options =
@@ -176,12 +189,13 @@ end
     goal.destroy
     @@prompt.error("This Goal Has Been DELETED!")
     puts "😵😵😵"
+    `say "What a relief. This goal was awful. But don't worry, it has been deleted. Let's pretend it never even existed.
+    \n........................."`
     view_my_board()
   end
 
   def edit_goal(goal)
-    puts `clear`
-    `says "Okay, great...Let's edit your goal!"`
+    `say "Great! Let's edit this goal!"`
     @@prompt.warn("Original Title: #{goal.title}")
     @@prompt.ok("Enter Your New Title:")
     goal.title = gets.chomp
@@ -190,7 +204,7 @@ end
     goal.description = gets.chomp
     goal.save
     @@prompt.warn("\nYou've Updated Your Goal, #{goal.title}")
-    `says `
+    `say "Awesome, you have updated your goal. Stay focused and continue working toward it each day! \n.................."`
     gets_menu_input()
   end
 end
