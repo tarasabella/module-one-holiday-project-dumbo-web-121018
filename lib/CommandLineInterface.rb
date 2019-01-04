@@ -8,6 +8,9 @@ class CommandLineInterface
 
   def greet
     @@prompt.warn("Welcome to GoalDigger! 🌈✨")
+    system "clear"
+    welcome
+    sleep(5)
 
       #a personalized goal board to keep track of your life goals!} ")
     `say "Welcome to GOAL DIGGER!! our personalized goal board will help you keep track of YOUR life goals!"`
