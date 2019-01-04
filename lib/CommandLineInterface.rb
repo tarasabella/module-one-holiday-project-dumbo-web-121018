@@ -7,13 +7,13 @@ class CommandLineInterface
   @@my_user = User.new
 
   def greet
-    @@prompt.warn("Welcome to GoalDigger! 🌈✨")
     system "clear"
+    @@prompt.warn("Welcome to GoalDigger! 🌈✨")
+    `say "Welcome to GOAL DIGGER!!"`
     welcome
-    sleep(5)
+    sleep(3)
+    `say "our personalized goal board will help you keep track of YOUR life goals!"`
 
-      #a personalized goal board to keep track of your life goals!} ")
-    `say "Welcome to GOAL DIGGER!! our personalized goal board will help you keep track of YOUR life goals!"`
     @@prompt.error("\nOur mission is to help motivate & inspire YOU to become a better version of yourself.")
 
     `say "We're happy to have you join us! Our mission is to help motivate & inspire YOU to become a better version of yourself"`
@@ -55,7 +55,7 @@ end
   def gets_menu_input()
     puts `clear`
     mm_options = {
-    "Browse Categories" => -> do browse_categories end,
+    "Browse Categories" => -> do browse_categories() end,
     "View My Goals Board" => -> do view_my_board() end,
     "Create A New Goal" => -> do create_goals() end,
     "Logout" => -> do logout() end
@@ -65,7 +65,7 @@ end
   end
   def logout()
     @@prompt.warn("See you soon, #{@@my_user.name}! 👋🏻")
-    `say "Thank you for using Goal DIGGER! Stay focused on your goals. And always remember, the future depends on what YOU do, today. By the way, Gonedee said THAT. We should really listen to him more often,...He knows what's up"`
+    `say "Thank you for using Goal DIGGER! Stay focused on your goals. And always remember, the future depends on what YOU do, today. By the way,...Gondee said THAT,... We should really listen to him more often,...He knows what's up"`
     #to ask yourself,...Is what you are doing today..., getting you closer, to where you want to be,...,tomorrow?,..........."`
   end
 
@@ -165,7 +165,7 @@ end
       `say "Enter the number associated with one of your goals to perform an action"`
     Goal.where(userid: @@my_user.id).find_each do |goal|
       @@prompt.warn("\n#{i}. #{goal.title}")
-      @@prompt.ok("n#{goal.description}")
+      @@prompt.ok("\n#{goal.description}")
       goals << goal
       i+= 1
     end
@@ -181,7 +181,8 @@ end
     {
       "Edit Goal" => -> do edit_goal(goal) end,
       "Delete Goal" => -> do delete_goal(goal) {"This goal has been deleted!"} end,
-      "Return To Goals Board" => -> do view_my_board() end
+      "Return To Goals Board" => -> do view_my_board() end,
+      "Return To Main Menu" => -> do gets_menu_input() end 
     }
     puts `clear`
     @@prompt.select("What Would You Like to Do With This Goal?", gm_options)
@@ -192,8 +193,7 @@ end
     goal.destroy
     @@prompt.error("This Goal Has Been DELETED!")
     puts "😵😵😵"
-    `say "What a relief. This goal was awful. But don't worry, it has been deleted. Let's pretend it never even existed.
-    \n........................."`
+    `say "What a relief. This goal was awful. But don't worry, it has been deleted. Let's pretend it never even existed."`
     view_my_board()
   end
 
